@@ -32,10 +32,10 @@ function App() {
 
   useEffect(() => {
     Promise.all([
-      fetch("http://localhost:4000/api/data")
+      fetch("https://backend-kemenag-batubara.vercel.app/api/data")
         .then((res) => res.json())
         .then((json) => setData(json.data)),
-      fetch("http://localhost:4000/api/search?keyword=batu+bara")
+      fetch("https://backend-kemenag-batubara.vercel.app/api/search?keyword=batu+bara")
         .then((res) => res.json())
         .then((json) => {
           console.log(json);
