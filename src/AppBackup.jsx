@@ -1,5 +1,5 @@
-// File: src/App.jsx
-import { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
+// App.jsx
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import { 
   Chart as ChartJS, 
@@ -11,11 +11,7 @@ import {
   LinearScale, 
   BarElement 
 } from "chart.js";
-import { Link, useNavigate } from "react-router-dom";
-import ReusableDoughnutChart from "./ReusableDoughnutChart"; // Fixed typo
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import ThemeContext from "./ThemeContext";
+import ReusableDoughnutChart from "./ReusableDoughnutChart";
 import "./App.css";
 
 // Register ChartJS components once
@@ -38,18 +34,7 @@ const API_ENDPOINTS = {
   search: "https://backend-kemenag-batubara.vercel.app/api/search?keyword=batu+bara"
 };
 
-// Satker options for Layanan dropdown
-const SATKER_OPTIONS = [
-  "Sekjen",
-  "Pendidikan",
-  "Bimas Islam",
-  "Bimas Kristen",
-  "Penyelenggara Zakat Wakaf",
-  "Penyelenggara Khatolik"
-];
-
 function App() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
   const [data, setData] = useState([]);
   const [newsItems, setNewsItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,9 +43,7 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [selectedGolongan, setSelectedGolongan] = useState("Semua");
   const [selectedStatus, setSelectedStatus] = useState("Semua");
-  const [isLayananOpen, setIsLayananOpen] = useState(false);
   const titleRefs = useRef([]);
-  const navigate = useNavigate();
 
   // Scroll handler dengan debouncing
   useEffect(() => {
@@ -80,15 +63,13 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Data fetching dengan error handling and timeout
+  // Data fetching dengan error handling
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
         
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
         const [dataResponse, newsResponse] = await Promise.all([
           fetch(API_ENDPOINTS.data),
           fetch(API_ENDPOINTS.search)
@@ -104,7 +85,7 @@ function App() {
         ]);
 
         setData(dataJson.data || []);
-        setNewsItems(newsJson.posts?.slice(0, 8) || []);
+        setNewsItems(newsJson.posts|| []);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Gagal memuat data. Silakan refresh halaman.");
@@ -179,7 +160,7 @@ function App() {
       legend: {
         position: 'top',
         labels: {
-          color: theme === 'dark' ? '#fff' : '#000',
+          color: '#fff',
           font: {
             size: 12
           }
@@ -188,7 +169,7 @@ function App() {
       title: {
         display: true,
         text: 'Distribusi Masa Kerja Pegawai (dalam Tahun)',
-        color: theme === 'dark' ? '#fff' : '#000',
+        color: '#fff',
         font: {
           size: 16,
           weight: 'bold'
@@ -197,19 +178,20 @@ function App() {
     },
     scales: {
       x: {
-        ticks: { color: theme === 'dark' ? '#fff' : '#000' },
-        grid: { color: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }
+        ticks: { color: '#fff' },
+        grid: { color: 'rgba(255,255,255,0.1)' }
       },
       y: {
-        ticks: { color: theme === 'dark' ? '#fff' : '#000' },
-        grid: { color: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }
+        ticks: { color: '#fff' },
+        grid: { color: 'rgba(255,255,255,0.1)' }
       }
     }
-  }), [theme]);
+  }), []);
 
   // Event handlers
   const handleNewsClick = useCallback((index) => {
     setActiveId(index);
+    // Smooth scroll to news section
     document.getElementById('news-section')?.scrollIntoView({ 
       behavior: 'smooth' 
     });
@@ -223,21 +205,10 @@ function App() {
     }
   }, []);
 
-  // Handle dropdown toggle
-  const toggleLayananDropdown = () => {
-    setIsLayananOpen(!isLayananOpen);
-  };
-
-  // Handle satker selection
-  const handleSatkerSelect = (satker) => {
-    navigate(`/layanan?satker=${satker.toLowerCase().replace(/\s+/g, '-')}`);
-    setIsLayananOpen(false);
-  };
-
   // Statistics dengan memoization
   const statistics = useMemo(() => ({
     total: filteredData.length,
-    active: 363,
+    active: 363, // Static data, bisa diganti dengan dynamic jika tersedia
     pns: filteredData.filter(item => item["STATUS PEGAWAI"] === "PNS").length,
     nonPns: filteredData.filter(item => item["STATUS PEGAWAI"] === "Non-PNS").length
   }), [filteredData]);
@@ -246,16 +217,10 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="text-center">
-          <div className="relative flex items-center justify-center h-16 w-16 mx-auto mb-4">
-            <div className="absolute animate-spin rounded-full h-16 w-16 border-b-2 border-green-500"></div>
-            <img 
-              src="/logo-kemenag.webp" 
-              alt="Kemenag Logo" 
-              className="h-10 w-10"
-            />
-          </div>
-          <div className="text-xl">Memuat data...</div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+          <div className="text-xl">Memuat data...</div>        
         </div>
+        {/* <div className="flex h-full w-full"><img src="./logo.png"></img></div> */}
       </div>
     );
   }
@@ -277,7 +242,71 @@ function App() {
     );
   }
 
-  const HeroSection = ({ astaProtas}) => (
+  return (
+    <div className="min-h-screen flex flex-col bg-black text-white">
+      {/* Netflix-style Navbar */}
+      <Navbar scrolled={scrolled} />
+      
+      {/* Hero Section */}
+      <HeroSection astaProtas={ASTA_PROTAS} />
+      
+      {/* Featured News Section */}
+      <FeaturedNews 
+        newsItems={newsItems}
+        activeId={activeId}
+        onNewsClick={handleNewsClick}
+      />
+      
+      {/* News Grid Section */}
+      <NewsGrid newsItems={newsItems} />
+      
+      {/* Dashboard Section */}
+      <Dashboard 
+        filteredData={filteredData}
+        statistics={statistics}
+        golonganOptions={golonganOptions}
+        statusOptions={statusOptions}
+        selectedGolongan={selectedGolongan}
+        selectedStatus={selectedStatus}
+        onFilterChange={handleFilterChange}
+        mkTahunChartData={mkTahunChartData}
+        mkTahunChartOptions={mkTahunChartOptions}
+      />
+      
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+}
+
+// Komponen Navbar yang dipisah
+const Navbar = ({ scrolled }) => (
+  <nav className={`fixed w-full z-50 transition-all duration-500 ${
+    scrolled ? 'bg-black py-2 shadow-lg' : 'bg-gradient-to-b from-black to-transparent py-4'
+  }`}>
+    <div className="container mx-auto px-4 flex justify-between items-center">
+      <div className="flex items-center">
+        <span className="text-green-500 text-2xl font-bold mr-2">KEMENAG</span>
+        <span className="text-white text-xl">Batu Bara</span>
+      </div>
+      
+      <div className="hidden md:flex space-x-6">
+        {['Beranda', 'Profil', 'Layanan', 'Berita', 'Kontak'].map((item) => (
+          <a key={item} href="#" className="text-white hover:text-green-400 transition-colors">
+            {item}
+          </a>
+        ))}
+      </div>
+      
+      <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors">
+        Login
+      </button>
+    </div>
+  </nav>
+);
+
+// Komponen Hero Section
+const HeroSection = ({ astaProtas }) => (
   <section className="h-auto min-h-screen relative overflow-hidden pt-16 pb-8">
     <div className="absolute inset-0 z-0">
       <img
@@ -286,8 +315,8 @@ function App() {
         alt="Kantor Kemenag Batu Bara"
         loading="lazy"
       />
-      <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
-      <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-green-800/60 to-black/90':'from-white/60 via-white/90'}`}></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/90"></div>
     </div>
 
     <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 py-8">
@@ -349,9 +378,9 @@ const FeaturedNews = ({ newsItems, activeId, onNewsClick }) => {
           alt={activeNews.title}
           loading="lazy"
         />
-        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
-        <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/70 to-black/90':'from-white/70 via-white/90'} `}></div>
-        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-red-700/60':'from-red-300/60'} to-transparent`}></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
       </div>
 
       <div className="relative z-10 h-full flex flex-col justify-end pb-20 px-4 md:px-8 lg:px-16">
@@ -376,7 +405,7 @@ const FeaturedNews = ({ newsItems, activeId, onNewsClick }) => {
         </div>
 
         <NewsCarousel 
-          newsItems={newsItems.slice(0, 8)} 
+          newsItems={newsItems.slice(0, 10)} 
           activeId={activeId}
           onNewsClick={onNewsClick}
         />
@@ -406,18 +435,18 @@ const NewsCarousel = ({ newsItems, activeId, onNewsClick }) => (
 // Komponen News Thumbnail
 const NewsThumbnail = ({ item, index, isActive, onClick }) => (
   <div 
-    className={`flex-none w-48 md:w-64 h-28 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
-      isActive ? 'md:h-44 bg-green-900 ring-2 ring-green-600 scale-105' : 'md:h-36 opacity-70 hover:opacity-100 hover:scale-105'
+    className={`flex-none w-48 md:w-64 h-28 md:h-36 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
+      isActive ? 'ring-2 ring-green-600 scale-105' : 'opacity-70 hover:opacity-100 hover:scale-105'
     }`}
     onClick={() => onClick(index)}
   >
     <img 
       src={item.image} 
-      className="w-full h-36 object-cover"
+      className="w-full h-full object-cover"
       alt={item.title}
       loading="lazy"
     />
-    <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 ${isActive ? '' : 'hidden'}`}>
+    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
       <p className="text-white text-xs md:text-sm font-medium truncate">{item.title}</p>
     </div>
   </div>
@@ -431,7 +460,7 @@ const NewsGrid = ({ newsItems }) => (
       <ExternalLinkButton />
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-      {newsItems.slice(0, 8).map((news, index) => (
+      {newsItems.map((news, index) => (
         <NewsCard key={index} news={news} />
       ))}
     </div>
@@ -613,49 +642,55 @@ const ChartContainer = ({ title, children, fullWidth = false }) => (
   </div>
 );
 
-  return (
-    <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
-      <Navbar 
-        scrolled={scrolled} 
-        isLayananOpen={isLayananOpen}
-        toggleLayananDropdown={toggleLayananDropdown}
-        handleSatkerSelect={handleSatkerSelect}
-      />
-      <button 
-        onClick={toggleTheme} 
-        className="fixed bottom-4 right-4 bg-green-600 p-2 rounded-full text-white hover:bg-green-700 transition-colors"
-      >
-        {theme === 'dark' ? 'Light' : 'Dark'}
-      </button>
-      
-      <HeroSection astaProtas={ASTA_PROTAS} theme={theme} />
-      
-      <FeaturedNews 
-        newsItems={newsItems}
-        activeId={activeId}
-        onNewsClick={handleNewsClick}
+// Komponen Footer
+const Footer = () => (
+  <footer className="bg-black border-t border-gray-800 py-8 md:py-12 px-4 md:px-8 lg:px-16">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      <FooterSection 
+        title="Kemenag Batu Bara"
+        content="Jl. Pendidikan No. 1, Lima Puluh Kota, Batu Bara, Sumatera Utara"
       />
       
-      <NewsGrid newsItems={newsItems} />
-      
-      <Dashboard 
-        filteredData={filteredData}
-        statistics={statistics}
-        golonganOptions={golonganOptions}
-        statusOptions={statusOptions}
-        selectedGolongan={selectedGolongan}
-        selectedStatus={selectedStatus}
-        onFilterChange={handleFilterChange}
-        mkTahunChartData={mkTahunChartData}
-        mkTahunChartOptions={mkTahunChartOptions}
+      <FooterSection 
+        title="Tautan Cepat"
+        links={['Beranda', 'Profil', 'Layanan', 'Kontak']}
       />
       
-      <Footer />
+      <FooterSection 
+        title="Kontak"
+        content={
+          <>
+            <p>Email: info@kemenagbatubara.go.id</p>
+            <p>Telepon: (0622) 123456</p>
+          </>
+        }
+      />
     </div>
-  );
-}
+    
+    <div className="max-w-7xl mx-auto mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+      <p>© 2023 Kementerian Agama Kabupaten Batu Bara. All rights reserved.</p>
+    </div>
+  </footer>
+);
 
-// Komponen Hero Section
-
+// Komponen Footer Section
+const FooterSection = ({ title, content, links }) => (
+  <div>
+    <h3 className="text-xl font-bold text-green-500 mb-3 md:mb-4">{title}</h3>
+    {links ? (
+      <ul className="space-y-2">
+        {links.map(link => (
+          <li key={link}>
+            <a href="#" className="text-gray-400 hover:text-green-400 transition-colors text-sm">
+              {link}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div className="text-gray-400 text-sm">{content}</div>
+    )}
+  </div>
+);
 
 export default App;

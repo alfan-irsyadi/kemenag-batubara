@@ -1,4 +1,3 @@
-/* App.css */
 @import "tailwindcss";
 
 @layer base {
@@ -6,8 +5,13 @@
     @apply box-border;
   }
   
-  body {
+  body.dark {
     @apply bg-black text-white;
+    font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  
+  body.light {
+    @apply bg-white text-black;
     font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   
