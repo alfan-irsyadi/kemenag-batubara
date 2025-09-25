@@ -7,8 +7,8 @@ const Footer = () => (
   <footer className="bg-black border-t border-gray-800 py-8 md:py-12 px-4 md:px-8 lg:px-16">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
       <FooterSection 
-        title="Kemenag Batu Bara"
-        content="Jl. Pendidikan No. 1, Lima Puluh Kota, Batu Bara, Sumatera Utara"
+        title="Kementerian Agama Batu Bara"
+        content="Jalan Perintis Kemerdekaan, Lima Puluh Kota, Batu Bara, Sumatera Utara"
       />
       
       <FooterSection 
@@ -20,15 +20,15 @@ const Footer = () => (
         title="Kontak"
         content={
           <>
-            <p>Email: info@kemenagbatubara.go.id</p>
-            <p>Telepon: (0622) 123456</p>
+            <p>Email: kemenagbatubara@gmail.com</p>
+            <p>Telepon: (0622) 96408</p>
           </>
         }
       />
     </div>
     
     <div className="max-w-7xl mx-auto mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-      <p>© 2023 Kementerian Agama Kabupaten Batu Bara. All rights reserved.</p>
+      <p>© 2025 Kementerian Agama Kabupaten Batu Bara. All rights reserved.</p>
     </div>
   </footer>
 );

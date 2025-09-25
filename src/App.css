@@ -91,3 +91,98 @@
     flex-direction: column;
   }
 }
+
+/* Theme-specific adjustments for light mode */
+body.light .bg-black {
+  background-color: white;
+}
+body.light .text-white {
+  color: black;
+}
+body.light .bg-gray-800 {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+body.light .bg-gray-900 {
+  background-color: #f3f4f6;
+}
+body.light .text-gray-300 {
+  color: #4b5563;
+}
+body.light .text-gray-400 {
+  color: #6b7280;
+}
+body.light .text-gray-500 {
+  color: #6b7280;
+}
+body.light .border-gray-700 {
+  border-color: #d1d5db;
+}
+body.light .border-gray-800 {
+  border-color: #e5e7eb;
+}
+body.light .hover\:border-green-500\/30:hover {
+  border-color: rgba(34,197,94,0.3);
+}
+body.light .bg-green-600 {
+  background-color: #22c55e;
+}
+body.light .hover\:bg-green-700:hover {
+  background-color: #16a34a;
+}
+body.light .text-green-400 {
+  color: #22c55e;
+}
+body.light .text-green-500 {
+  color: #22c55e;
+}
+body.light .hover\:text-green-400:hover {
+  color: #16a34a;
+}
+body.light .hover\:text-green-500:hover {
+  color: #16a34a;
+}
+body.light .bg-white\/10 {
+  background-color: rgba(243,244,246,0.1);
+}
+body.light .bg-gradient-to-t.from-black {
+  background-image: linear-gradient(to top, white, transparent);
+}
+body.light .bg-gradient-to-b.from-black\/60 {
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+}
+body.light .bg-gradient-to-b.from-black\/70 {
+  background-image: linear-gradient(to bottom, rgba(255,255,255,0.7), transparent);
+}
+body.light .bg-gradient-to-b.from-white {
+  background-image: linear-gradient(to bottom, white, transparent);
+}
+body.light .bg-gradient-to-b.from-black {
+  background-image: linear-gradient(to bottom, white, transparent);
+}
+body.light .bg-gradient-to-r.from-black\/60 {
+  background-image: linear-gradient(to right, rgba(255,255,255,0.6), transparent);
+}
+body.light .hover\:bg-green-900\/30:hover {
+  background-color: rgba(22,163,74,0.3);
+}
+body.light .bg-green-900 {
+  background-color: #d1fae5;
+}
+body.light .ring-green-600 {
+  --tw-ring-color: #22c55e;
+}
+body.light .bg-gray-800.rounded-xl {
+  background-color: #f3f4f6;
+}
+body.light .bg-gray-800.rounded-xl .text-white {
+  color: black;
+}
+body.light .bg-gray-800.rounded-xl .text-gray-300 {
+  color: #4b5563;
+}
+
+/* Mobile menu styles */
+body.light .border-t.border-gray-700 {
+  border-color: #d1d5db;
+}

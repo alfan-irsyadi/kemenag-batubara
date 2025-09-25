@@ -287,7 +287,7 @@ function App() {
         loading="lazy"
       />
       <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
-      <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-green-800/60 to-black/90':'from-white/60 via-white/90'}`}></div>
+      <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/60 to-black/90':'from-white/60 via-white/90'}`}></div>
     </div>
 
     <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 py-8">
@@ -351,7 +351,7 @@ const FeaturedNews = ({ newsItems, activeId, onNewsClick }) => {
         />
         <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
         <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/70 to-black/90':'from-white/70 via-white/90'} `}></div>
-        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-red-700/60':'from-red-300/60'} to-transparent`}></div>
+        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-black/60':'from-black/60'} to-transparent`}></div>
       </div>
 
       <div className="relative z-10 h-full flex flex-col justify-end pb-20 px-4 md:px-8 lg:px-16">

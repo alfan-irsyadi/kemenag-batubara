@@ -36,7 +36,7 @@ const layananData = [
     ikm: "Indeks Kepuasan Masyarakat: 88%"
   },
   {
-    name: "Bimas Kristen",
+    name: "Penyelenggara Bimas Kristen",
     tupoksi: {
       tugasDanFungsi: "Menyelenggarakan pembinaan masyarakat Kristen dalam bidang keagamaan.",
       layanan: "Pelayanan pembinaan umat Kristen dan pendidikan keagamaan Kristen.",
@@ -54,7 +54,7 @@ const layananData = [
     ikm: "Indeks Kepuasan Masyarakat: 89%"
   },
   {
-    name: "Penyelenggara Khatolik",
+    name: "Katolik",
     tupoksi: {
       tugasDanFungsi: "Menyelenggarakan pembinaan masyarakat Katolik dalam bidang keagamaan.",
       layanan: "Pelayanan pembinaan umat Katolik dan pendidikan keagamaan Katolik.",
