@@ -30,11 +30,11 @@ function Kontak() {
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">Kontak Kami</h2>
         <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
           <h3 className="text-xl font-bold mb-4 text-green-400">Alamat</h3>
-          <p className="text-gray-300 mb-6">Jl. Pendidikan No. 1, Lima Puluh Kota, Batu Bara, Sumatera Utara</p>
+          <p className="text-gray-300 mb-6">Jalan Perintis Kemerdekaan, Lima Puluh Kota, Batu Bara, Sumatera Utara</p>
           <h3 className="text-xl font-bold mb-4 text-green-400">Kontak</h3>
           <ul className="text-gray-300 space-y-2">
-            <li>Email: info@kemenagbatubara.go.id</li>
-            <li>Telepon: (0622) 123456</li>
+            <li>Email: kemenagbatubara@gmail.com</li>
+            <li>Telepon: (0622) 96408</li>
           </ul>
         </div>
       </section>

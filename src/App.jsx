@@ -118,7 +118,7 @@ function App() {
 
   // Filter options dengan memoization
   const golonganOptions = useMemo(() => 
-    ["Semua", ...new Set(data.map(item => item.Golongan).filter(Boolean))],
+    ["Semua", ...new Set(data.map(item => item['GOL_RUANG']).filter(Boolean))],
     [data]
   );
 
@@ -291,13 +291,11 @@ function App() {
     </div>
 
     <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 py-8">
-      <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 uppercase leading-tight">
-        Kementerian Agama <br />
-        Kabupaten Batu Bara
-      </h1>
+      <img src={`./logo-${theme}.png`} className="w-1/2"/>
+      
 
       <div className="w-full md:w-2/3 mt-4 md:mt-8">
-        <p className="text-gray-200 text-base md:text-xl mb-4 md:mb-6">
+        <p className={`${theme === 'dark' ? 'bg-[hsl(220, 13%, 91%)]':'bg-[hsl(220, 13%, 9%)]'} text-base md:text-xl mb-4 md:mb-6`}>
           <span className="font-semibold text-lg md:text-2xl">
             Selamat datang di kawasan pembangunan Zona Integritas
           </span>{" "}
@@ -350,8 +348,8 @@ const FeaturedNews = ({ newsItems, activeId, onNewsClick }) => {
           loading="lazy"
         />
         <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
-        <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/70 to-black/90':'from-white/70 via-white/90'} `}></div>
-        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-black/60':'from-black/60'} to-transparent`}></div>
+        <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/50 to-black/90':'from-white/50 via-white/90'} `}></div>
+        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-black/40':'from-white/40'} to-transparent`}></div>
       </div>
 
       <div className="relative z-10 h-full flex flex-col justify-end pb-20 px-4 md:px-8 lg:px-16">
@@ -362,7 +360,7 @@ const FeaturedNews = ({ newsItems, activeId, onNewsClick }) => {
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
             {activeNews.title}
           </h2>
-          <p className="text-gray-300 text-base md:text-lg mb-6 line-clamp-3">
+          <p className={`${theme==='dark'?'text-[hsl(220, 13%, 0%)]': 'text-[hsl(220, 13%, 40%)]'} text-base md:text-lg mb-6 line-clamp-3`}>
             {activeNews.excerpt}
           </p>
           <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -425,7 +423,7 @@ const NewsThumbnail = ({ item, index, isActive, onClick }) => (
 
 // Komponen News Grid
 const NewsGrid = ({ newsItems }) => (
-  <section className="py-12 md:py-16 px-4 md:px-8 lg:px-16">
+  <section className="py-12 md:py-16 px-4 md:px-8 lg:px-16 bg-black text-white/80">
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8">
       <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-0">Semua Berita</h2>
       <ExternalLinkButton />
@@ -495,13 +493,13 @@ const Dashboard = ({
   selectedStatus,
   onFilterChange,
   mkTahunChartData,
-  mkTahunChartOptions
+  mkTahunChartOptions,
 }) => (
-  <section id="kepeg" className="py-12 md:py-16 px-4 md:px-8 lg:px-16 bg-gray-900">
+  <section id="kepeg" className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 neo-card">
     <div className="max-w-7xl mx-auto">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Dashboard Kepegawaian</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Dashboard Kepegawaian</h1>
       
-      <DashboardFilters 
+      <DashboardFilters
         golonganOptions={golonganOptions}
         statusOptions={statusOptions}
         selectedGolongan={selectedGolongan}
@@ -511,7 +509,7 @@ const Dashboard = ({
       
       <StatisticsCards statistics={statistics} />
       
-      <ChartsSection 
+      <ChartsSection
         filteredData={filteredData}
         mkTahunChartData={mkTahunChartData}
         mkTahunChartOptions={mkTahunChartOptions}
@@ -526,35 +524,36 @@ const DashboardFilters = ({
   statusOptions,
   selectedGolongan,
   selectedStatus,
-  onFilterChange
+  onFilterChange,
 }) => (
-  <div className="flex flex-col md:flex-row gap-4 mb-8">
-    <FilterSelect 
+  <div className="flex flex-col sm:flex-row gap-4 mb-8">
+    <FilterSelect
       label="Filter berdasarkan Golongan"
       value={selectedGolongan}
       options={golonganOptions}
-      onChange={(value) => onFilterChange('golongan', value)}
+      onChange={(value) => onFilterChange("golongan", value)}
     />
-    <FilterSelect 
+    <FilterSelect
       label="Filter berdasarkan Status"
       value={selectedStatus}
       options={statusOptions}
-      onChange={(value) => onFilterChange('status', value)}
+      onChange={(value) => onFilterChange("status", value)}
     />
   </div>
 );
 
-// Komponen Filter Select
 const FilterSelect = ({ label, value, options, onChange }) => (
   <div className="flex-1">
-    <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
-    <select 
-      value={value} 
+    <label className="block text-sm font-medium text-gray-400 mb-1">{label}</label>
+    <select
+      value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-gray-800 border border-gray-700 text-white rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+      className={`w-full neo-card border-none text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${theme==='dark'?'bg-black':'bg-white'}`}
     >
-      {options.map(option => (
-        <option key={option} value={option}>{option}</option>
+      {options.map((option) => (
+        <option key={option} value={option} className="">
+          {option}
+        </option>
       ))}
     </select>
   </div>
@@ -562,19 +561,18 @@ const FilterSelect = ({ label, value, options, onChange }) => (
 
 // Komponen Statistics Cards
 const StatisticsCards = ({ statistics }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-12">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
     <StatCard label="Jumlah Pegawai" value={statistics.total} />
     <StatCard label="Pegawai Aktif" value={statistics.active} />
     <StatCard label="Pegawai PNS" value={statistics.pns} />
-    <StatCard label="Pegawai Non-PNS" value={statistics.nonPns} />
+    <StatCard label="Pegawai Non-PNS" value={statistics.total - statistics.pns} />
   </div>
 );
 
-// Komponen Stat Card
 const StatCard = ({ label, value }) => (
-  <div className="bg-gray-800 rounded-xl p-4 md:p-6 shadow-lg border border-gray-700 hover:border-green-500/30 transition-colors">
+  <div className="neo-card p-4 sm:p-6">
     <div className="text-gray-400 text-sm mb-2">{label}</div>
-    <div className="text-2xl md:text-3xl font-bold text-green-400">{value}</div>
+    <div className="text-xl sm:text-2xl font-semibold text-green-500">{value}</div>
   </div>
 );
 
@@ -605,10 +603,8 @@ const ChartsSection = ({ filteredData, mkTahunChartData, mkTahunChartOptions }) 
 
 // Komponen Chart Container
 const ChartContainer = ({ title, children, fullWidth = false }) => (
-  <div className={`bg-gray-800 rounded-xl p-4 md:p-6 shadow-lg border border-gray-700 ${
-    fullWidth ? 'lg:col-span-2' : ''
-  }`}>
-    <h3 className="text-xl font-bold mb-4 text-center text-white">{title}</h3>
+  <div className={`neo-card p-4 sm:p-6 ${fullWidth ? "lg:col-span-2" : ""}`}>
+    <h3 className={`text-lg sm:text-xl font-semibold mb-4 text-center ${theme==='dark'?'text-gray-200':'text-gray-800'} `}>{title}</h3>
     {children}
   </div>
 );
@@ -620,13 +616,7 @@ const ChartContainer = ({ title, children, fullWidth = false }) => (
         isLayananOpen={isLayananOpen}
         toggleLayananDropdown={toggleLayananDropdown}
         handleSatkerSelect={handleSatkerSelect}
-      />
-      <button 
-        onClick={toggleTheme} 
-        className="fixed bottom-4 right-4 bg-green-600 p-2 rounded-full text-white hover:bg-green-700 transition-colors"
-      >
-        {theme === 'dark' ? 'Light' : 'Dark'}
-      </button>
+      />      
       
       <HeroSection astaProtas={ASTA_PROTAS} theme={theme} />
       

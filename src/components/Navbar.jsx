@@ -27,30 +27,34 @@ const Navbar = ({
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-500 ${
+      className={`fixed w-full z-50 transition-all duration-500 neo-card ${
         scrolled
           ? theme === "dark"
-            ? "bg-black py-2 shadow-lg"
-            : "bg-white py-2 shadow-lg"
+            ? "bg-gray-900/80"
+            : "bg-gray-100/80"
           : theme === "dark"
-          ? "bg-gradient-to-b from-black to-transparent py-4"
-          : "bg-gradient-to-b from-white to-transparent py-4"
+          ? "bg-gradient-to-b from-gray-900/50 to-transparent"
+          : "bg-gradient-to-b from-gray-100/50 to-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 flex justify-between items-center">
+      <div className="container mx-auto px-4 sm:px-8 flex justify-between items-center py-3 sm:py-4">
         <div className="flex items-center">
-          <img src="/logo.png" alt="Kemenag Logo" className="h-12 mr-2" />
+          <img
+            src={`${scrolled ? `/logo-${theme}.png`: '/logo-kemenag.webp'}`}
+            alt="Kemenag Logo"
+            className="h-10 sm:h-12 mr-2"
+          />
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
           {["Beranda", "Profil", "Berita", "Kontak"].map((item) => (
             <Link
               key={item}
-              to={item === "Beranda" ? "/" : `/${item.toLowerCase()}`}
-              className={`hover:text-green-400 transition-colors ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}
+              to={item === "Beranda" ? "/" : item == 'Berita' ? 'https://sumut.kemenag.go.id/beranda/list-pencarian?cari=batu%20bara' : `/${item.toLowerCase()}`}
+              className={`neo-button px-3 py-1 text-sm sm:text-base ${
+                theme === "dark" ? "text-gray-200" : "text-gray-800"
+              } hover:text-green-500`}
             >
               {item}
             </Link>
@@ -59,18 +63,16 @@ const Navbar = ({
           <div className="relative">
             <button
               onClick={toggleLayananDropdown}
-              className={`hover:text-green-400 transition-colors ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}
+              className={`neo-button px-3 py-1 text-sm sm:text-base ${
+                theme === "dark" ? "text-gray-200" : "text-gray-800"
+              } hover:text-green-500`}
             >
               Layanan
             </button>
             {isLayananOpen && (
               <div
-                className={`absolute top-full left-0 mt-2 w-48 border rounded-md shadow-lg ${
-                  theme === "dark"
-                    ? "bg-gray-800 border-gray-700"
-                    : "bg-white border-gray-200"
+                className={`absolute top-full left-0 mt-2 w-48 neo-card ${
+                  theme === "dark" ? "bg-gray-800/50" : "bg-gray-100/50"
                 }`}
               >
                 {SATKER_OPTIONS.map((satker) => (
@@ -80,8 +82,8 @@ const Navbar = ({
                       handleSatkerSelect(satker);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`block w-full text-left px-4 py-2 transition-colors hover:bg-green-600 hover:text-white ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                    className={`block w-full text-left px-4 py-2 text-sm transition-colors hover:bg-green-500 hover:text-white ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-800"
                     }`}
                   >
                     {satker}
@@ -96,7 +98,9 @@ const Navbar = ({
             className={`relative inline-flex items-center cursor-pointer ${
               theme === "dark" ? "text-yellow-300" : "text-gray-700"
             }`}
-            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            title={
+              theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
+            }
           >
             <input
               type="checkbox"
@@ -105,17 +109,21 @@ const Navbar = ({
               className="sr-only"
             />
             <span
-              className={`w-10 h-6 rounded-full transition-colors duration-300 ${
-                theme === "dark" ? "bg-gray-700" : "bg-gray-200"
+              className={`w-10 h-6 rounded-full transition-all duration-300 ${
+                theme === "dark"
+                  ? "bg-gray-800 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.1)"
+                  : "bg-gray-200 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), -2px -2px 4px rgba(255, 255, 255, 0.5)"
               }`}
             >
               <span
                 className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 transform ${
                   theme === "dark" ? "translate-x-4" : "translate-x-0"
-                }`}
+                } box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2)`}
               ></span>
             </span>
-            <span className="ml-2">{theme === "dark" ? "☀️" : "🌙"}</span>
+            <span className="ml-2 text-sm">
+              {theme === "dark" ? "☀️" : "🌙"}
+            </span>
           </label>
         </div>
 
@@ -126,7 +134,9 @@ const Navbar = ({
             className={`relative inline-flex items-center cursor-pointer ${
               theme === "dark" ? "text-yellow-300" : "text-gray-700"
             }`}
-            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            title={
+              theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"
+            }
           >
             <input
               type="checkbox"
@@ -135,31 +145,33 @@ const Navbar = ({
               className="sr-only"
             />
             <span
-              className={`w-10 h-6 rounded-full transition-colors duration-300 ${
-                theme === "dark" ? "bg-gray-700" : "bg-gray-200"
+              className={`w-10 h-6 rounded-full transition-all duration-300 ${
+                theme === "dark"
+                  ? "bg-gray-800 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.1)"
+                  : "bg-gray-200 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), -2px -2px 4px rgba(255, 255, 255, 0.5)"
               }`}
             >
               <span
                 className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 transform ${
                   theme === "dark" ? "translate-x-4" : "translate-x-0"
-                }`}
+                } box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2)`}
               ></span>
             </span>
-            <span className="ml-2">{theme === "dark" ? "☀️" : "🌙"}</span>
+            <span className="ml-2 text-sm">
+              {theme === "dark" ? "☀️" : "🌙"}
+            </span>
           </label>
 
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMobileMenu}
-            className={`p-2 rounded-md transition-colors ${
-              theme === "dark"
-                ? "text-white hover:bg-gray-700"
-                : "text-gray-900 hover:bg-gray-200"
+            className={`neo-button p-2 text-sm ${
+              theme === "dark" ? "text-gray-200" : "text-gray-800"
             }`}
             aria-label="Toggle mobile menu"
           >
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -183,18 +195,16 @@ const Navbar = ({
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div
-          className={`md:hidden mt-2 px-4 py-2 border-t ${
-            theme === "dark"
-              ? "bg-gray-900 border-gray-700"
-              : "bg-white border-gray-200"
+          className={`md:hidden mt-2 px-4 py-2 neo-card ${
+            theme === "dark" ? "bg-gray-900/50" : "bg-gray-100/50"
           }`}
         >
           {["Beranda", "Profil", "Berita", "Kontak"].map((item) => (
             <Link
               key={item}
               to={item === "Beranda" ? "/" : `/${item.toLowerCase()}`}
-              className={`block py-2 hover:text-green-400 transition-colors ${
-                theme === "dark" ? "text-white" : "text-gray-900"
+              className={`block py-2 text-sm hover:text-green-500 transition-colors ${
+                theme === "dark" ? "text-gray-200" : "text-gray-800"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -205,18 +215,16 @@ const Navbar = ({
           <div className="relative">
             <button
               onClick={toggleLayananDropdown}
-              className={`block w-full text-left py-2 hover:text-green-400 transition-colors ${
-                theme === "dark" ? "text-white" : "text-gray-900"
+              className={`block w-full text-left py-2 text-sm hover:text-green-500 transition-colors ${
+                theme === "dark" ? "text-gray-200" : "text-gray-800"
               }`}
             >
               Layanan
             </button>
             {isLayananOpen && (
               <div
-                className={`mt-1 w-full border rounded-md shadow-lg ${
-                  theme === "dark"
-                    ? "bg-gray-800 border-gray-700"
-                    : "bg-white border-gray-200"
+                className={`mt-1 w-full neo-card ${
+                  theme === "dark" ? "bg-gray-800/50" : "bg-gray-100/50"
                 }`}
               >
                 {SATKER_OPTIONS.map((satker) => (
@@ -226,8 +234,8 @@ const Navbar = ({
                       handleSatkerSelect(satker);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`block w-full text-left px-4 py-2 transition-colors hover:bg-green-600 hover:text-white ${
-                      theme === "dark" ? "text-white" : "text-gray-900"
+                    className={`block w-full text-left px-4 py-2 text-sm transition-colors hover:bg-green-500 hover:text-white ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-800"
                     }`}
                   >
                     {satker}
