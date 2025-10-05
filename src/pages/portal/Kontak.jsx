@@ -1,8 +1,9 @@
 // File: src/Kontak.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Tambahkan ini
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import "../../App.css";
 
 function Kontak() {
   const [isLayananOpen, setIsLayananOpen] = useState(false);

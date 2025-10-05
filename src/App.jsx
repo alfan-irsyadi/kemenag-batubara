@@ -11,11 +11,11 @@ import {
   LinearScale, 
   BarElement 
 } from "chart.js";
-import { Link, useNavigate } from "react-router-dom";
-import ReusableDoughnutChart from "./ReusableDoughnutChart"; // Fixed typo
+import { useNavigate } from "react-router-dom";
+import ReusableDoughnutChart from "./components/ReusableDoughnutChart";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ThemeContext from "./ThemeContext";
+import ThemeContext from "./context/ThemeContext";
 import "./App.css";
 
 // Register ChartJS components once
@@ -38,18 +38,346 @@ const API_ENDPOINTS = {
   search: "https://backend-kemenag-batubara.vercel.app/api/search?keyword=batu+bara"
 };
 
-// Satker options for Layanan dropdown
-const SATKER_OPTIONS = [
-  "Sekjen",
-  "Pendidikan",
-  "Bimas Islam",
-  "Bimas Kristen",
-  "Penyelenggara Zakat Wakaf",
-  "Penyelenggara Khatolik"
-];
+// Komponen Hero Section
+const HeroSection = ({ astaProtas, theme }) => (
+  <section className="h-auto min-h-screen relative overflow-hidden pt-16 pb-8">
+    <div className="absolute inset-0 z-0">
+      <img
+        src="kantor-kemenag-batubara.jpg"
+        className="w-full h-full object-cover"
+        alt="Kantor Kemenag Batu Bara"
+        loading="lazy"
+      />
+      <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
+      <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/60 to-black/90':'from-white/60 via-white/90'}`}></div>
+    </div>
+
+    <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 py-8">
+      <img src={`./logo-${theme}.png`} className="w-1/2" alt="Logo Kemenag"/>
+      
+      <div className="w-full md:w-2/3 mt-4 md:mt-8">
+        <p className={`${theme === 'dark' ? 'text-gray-200':'text-gray-800'} text-base md:text-xl mb-4 md:mb-6`}>
+          <span className="font-semibold text-lg md:text-2xl">
+            Selamat datang di kawasan pembangunan Zona Integritas
+          </span>{" "}
+          <br />
+          menuju "Wilayah Bebas dari Korupsi (WBK)" dan "Wilayah Birokrasi
+          Bersih dan Melayani (WBBM)"
+        </p>
+      </div>
+      
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-green-500 to-transparent my-4 md:my-8"></div>
+      
+      <h2 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">
+        8 Asta Protas Kementerian Agama
+      </h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-6xl px-4">
+        {astaProtas.map((title, index) => (
+          <AstaProtaCard key={index} index={index} title={title} />
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// Komponen Kartu Asta Prota
+const AstaProtaCard = ({ index, title }) => (
+  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4 flex items-center transition-all duration-300 hover:bg-green-900/30 hover:scale-105 border border-gray-700 hover:border-green-500">
+    <div className="flex-shrink-0 w-8 h-8 md:w-12 md:h-12 rounded-full bg-green-600 flex items-center justify-center font-bold mr-2 md:mr-3 text-xs md:text-base">
+      {index + 1}
+    </div>
+    <div className="text-xs md:text-sm font-medium">
+      {title}
+    </div>
+  </div>
+);
+
+// Komponen Featured News
+const FeaturedNews = ({ newsItems, activeId, onNewsClick, theme }) => {
+  if (newsItems.length === 0) return null;
+
+  const activeNews = newsItems[activeId] || newsItems[0];
+
+  return (
+    <section id="news-section" className="relative h-screen overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={activeNews.image}
+          className="w-full h-full object-cover"
+          alt={activeNews.title}
+          loading="lazy"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
+        <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/50 to-black/90':'from-white/50 via-white/90'} `}></div>
+        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-black/40':'from-white/40'} to-transparent`}></div>
+      </div>
+
+      <div className="relative z-10 h-full flex flex-col justify-end pb-20 px-4 md:px-8 lg:px-16">
+        <div className="max-w-2xl">
+          <span className="inline-block px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-full mb-4">
+            {activeNews.category}
+          </span>
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight">
+            {activeNews.title}
+          </h2>
+          <p className={`${theme==='dark'?'text-gray-300': 'text-gray-700'} text-base md:text-lg mb-6 line-clamp-3`}>
+            {activeNews.excerpt}
+          </p>
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            <span className="text-gray-400 text-sm">
+              {activeNews.date}
+            </span>
+            <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-medium transition-colors w-full md:w-auto">
+              Baca Selengkapnya
+            </button>
+          </div>
+        </div>
+
+        <NewsCarousel 
+          newsItems={newsItems.slice(0, 8)} 
+          activeId={activeId}
+          onNewsClick={onNewsClick}
+        />
+      </div>
+    </section>
+  );
+};
+
+// Komponen News Carousel
+const NewsCarousel = ({ newsItems, activeId, onNewsClick }) => (
+  <div className="mt-8 md:mt-12">
+    <h3 className="text-lg md:text-xl font-bold mb-4">Berita Terkini</h3>
+    <div className="flex space-x-3 md:space-x-4 overflow-x-auto p-4 scrollbar-hide">
+      {newsItems.map((item, index) => (
+        <NewsThumbnail 
+          key={index}
+          item={item}
+          index={index}
+          isActive={index === activeId}
+          onClick={onNewsClick}
+        />
+      ))}
+    </div>
+  </div>
+);
+
+// Komponen News Thumbnail
+const NewsThumbnail = ({ item, index, isActive, onClick }) => (
+  <div 
+    className={`flex-none w-48 md:w-64 h-28 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
+      isActive ? 'md:h-44 bg-green-900 ring-2 ring-green-600 scale-105' : 'md:h-36 opacity-70 hover:opacity-100 hover:scale-105'
+    }`}
+    onClick={() => onClick(index)}
+  >
+    <img 
+      src={item.image} 
+      className="w-full h-36 object-cover"
+      alt={item.title}
+      loading="lazy"
+    />
+    <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 ${isActive ? '' : 'hidden'}`}>
+      <p className="text-white text-xs md:text-sm font-medium truncate">{item.title}</p>
+    </div>
+  </div>
+);
+
+// Komponen News Grid
+const NewsGrid = ({ newsItems, theme }) => (
+  <section className={`py-12 md:py-16 px-4 md:px-8 lg:px-16 ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8">
+      <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-0">Semua Berita</h2>
+      <ExternalLinkButton />
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+      {newsItems.slice(0, 8).map((news, index) => (
+        <NewsCard key={index} news={news} theme={theme} />
+      ))}
+    </div>
+  </section>
+);
+
+// Komponen News Card
+const NewsCard = ({ news, theme }) => (
+  <div className={`${theme === 'dark' ? 'bg-gray-900 border-gray-800 hover:border-green-500/30' : 'bg-gray-50 border-gray-200 hover:border-green-500/50'} rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border`}>
+    <div className="h-40 md:h-48 relative">
+      <img
+        src={news.image}
+        className="w-full h-full object-cover"
+        alt={news.title}
+        loading="lazy"
+      />
+      <div className="absolute top-0 left-0 bg-gradient-to-b from-black/60 to-transparent w-full h-16"></div>
+      <span className="absolute top-3 left-3 px-2 py-1 bg-green-600 text-white text-xs font-medium rounded">
+        {news.category}
+      </span>
+    </div>
+    <div className="p-3 md:p-4">
+      <h3 className="text-base md:text-lg font-bold mb-2 line-clamp-2">
+        {news.title}
+      </h3>
+      <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'} text-xs md:text-sm mb-3 md:mb-4 line-clamp-3`}>
+        {news.excerpt}
+      </p>
+      <div className="flex justify-between items-center">
+        <span className={`${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'} text-xs`}>{news.date}</span>
+        <button className="text-green-500 hover:text-green-400 text-xs md:text-sm font-medium">
+          Baca →
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// Komponen External Link Button
+const ExternalLinkButton = () => (
+  <a 
+    href="https://sumut.kemenag.go.id/beranda/list-pencarian?cari=batu%20bara" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors flex items-center"
+  >
+    Baca Selengkapnya
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+      <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+    </svg>
+  </a>
+);
+
+// Komponen Dashboard
+const Dashboard = ({
+  filteredData,
+  statistics,
+  golonganOptions,
+  statusOptions,
+  selectedGolongan,
+  selectedStatus,
+  onFilterChange,
+  mkTahunChartData,
+  mkTahunChartOptions,
+  theme
+}) => (
+  <section id="kepeg" className={`py-12 sm:py-16 px-4 sm:px-8 lg:px-16 ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+    <div className="max-w-7xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Dashboard Kepegawaian</h1>
+      
+      <DashboardFilters
+        golonganOptions={golonganOptions}
+        statusOptions={statusOptions}
+        selectedGolongan={selectedGolongan}
+        selectedStatus={selectedStatus}
+        onFilterChange={onFilterChange}
+        theme={theme}
+      />
+      
+      <StatisticsCards statistics={statistics} theme={theme} />
+      
+      <ChartsSection
+        filteredData={filteredData}
+        mkTahunChartData={mkTahunChartData}
+        mkTahunChartOptions={mkTahunChartOptions}
+        theme={theme}
+      />
+    </div>
+  </section>
+);
+
+// Komponen Dashboard Filters
+const DashboardFilters = ({
+  golonganOptions,
+  statusOptions,
+  selectedGolongan,
+  selectedStatus,
+  onFilterChange,
+  theme
+}) => (
+  <div className="flex flex-col sm:flex-row gap-4 mb-8">
+    <FilterSelect
+      label="Filter berdasarkan Golongan"
+      value={selectedGolongan}
+      options={golonganOptions}
+      onChange={(value) => onFilterChange("golongan", value)}
+      theme={theme}
+    />
+    <FilterSelect
+      label="Filter berdasarkan Status"
+      value={selectedStatus}
+      options={statusOptions}
+      onChange={(value) => onFilterChange("status", value)}
+      theme={theme}
+    />
+  </div>
+);
+
+const FilterSelect = ({ label, value, options, onChange, theme }) => (
+  <div className="flex-1">
+    <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{label}</label>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`w-full rounded-lg border-none text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${theme==='dark'?'bg-gray-900 text-white':'bg-gray-100 text-black'}`}
+    >
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
+// Komponen Statistics Cards
+const StatisticsCards = ({ statistics, theme }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
+    <StatCard label="Jumlah Pegawai" value={statistics.total} theme={theme} />
+    <StatCard label="Pegawai Aktif" value={statistics.active} theme={theme} />
+    <StatCard label="Pegawai PNS" value={statistics.pns} theme={theme} />
+    <StatCard label="Pegawai Non-PNS" value={statistics.total - statistics.pns} theme={theme} />
+  </div>
+);
+
+const StatCard = ({ label, value, theme }) => (
+  <div className={`rounded-lg p-4 sm:p-6 ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <div className={`text-sm mb-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{label}</div>
+    <div className="text-xl sm:text-2xl font-semibold text-green-500">{value}</div>
+  </div>
+);
+
+// Komponen Charts Section
+const ChartsSection = ({ filteredData, mkTahunChartData, mkTahunChartOptions, theme }) => (
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+    <ChartContainer title="Distribusi Pegawai berdasarkan Generasi" theme={theme}>
+      <ReusableDoughnutChart
+        jsonData={filteredData}
+        dataKey={"Generasi"}
+      />
+    </ChartContainer>
+    
+    <ChartContainer title="Distribusi Pegawai berdasarkan Pendidikan" theme={theme}>
+      <ReusableDoughnutChart
+        jsonData={filteredData}
+        dataKey={"JENJANG_PENDIDIKAN"}
+      />
+    </ChartContainer>
+    
+    <ChartContainer title="Distribusi Masa Kerja Pegawai" fullWidth theme={theme}>
+      <div className="h-64 md:h-80">
+        <Bar data={mkTahunChartData} options={mkTahunChartOptions} />
+      </div>
+    </ChartContainer>
+  </div>
+);
+
+// Komponen Chart Container
+const ChartContainer = ({ title, children, fullWidth = false, theme }) => (
+  <div className={`rounded-lg p-4 sm:p-6 ${fullWidth ? "lg:col-span-2" : ""} ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+    <h3 className={`text-lg sm:text-xl font-semibold mb-4 text-center ${theme==='dark'?'text-gray-200':'text-gray-800'}`}>{title}</h3>
+    {children}
+  </div>
+);
 
 function App() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const [data, setData] = useState([]);
   const [newsItems, setNewsItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +387,6 @@ function App() {
   const [selectedGolongan, setSelectedGolongan] = useState("Semua");
   const [selectedStatus, setSelectedStatus] = useState("Semua");
   const [isLayananOpen, setIsLayananOpen] = useState(false);
-  const titleRefs = useRef([]);
   const navigate = useNavigate();
 
   // Scroll handler dengan debouncing
@@ -118,7 +445,7 @@ function App() {
 
   // Filter options dengan memoization
   const golonganOptions = useMemo(() => 
-    ["Semua", ...new Set(data.map(item => item['GOL_RUANG']).filter(Boolean))],
+    ["Semua", ...new Set(data.map(item => item['Golongan']).filter(Boolean))],
     [data]
   );
 
@@ -244,7 +571,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
         <div className="text-center">
           <div className="relative flex items-center justify-center h-16 w-16 mx-auto mb-4">
             <div className="absolute animate-spin rounded-full h-16 w-16 border-b-2 border-green-500"></div>
@@ -262,7 +589,7 @@ function App() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className={`min-h-screen flex items-center justify-center ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
           <div className="text-xl mb-4">{error}</div>
@@ -276,338 +603,6 @@ function App() {
       </div>
     );
   }
-
-  const HeroSection = ({ astaProtas}) => (
-  <section className="h-auto min-h-screen relative overflow-hidden pt-16 pb-8">
-    <div className="absolute inset-0 z-0">
-      <img
-        src="kantor-kemenag-batubara.jpg"
-        className="w-full h-full object-cover"
-        alt="Kantor Kemenag Batu Bara"
-        loading="lazy"
-      />
-      <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
-      <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/60 to-black/90':'from-white/60 via-white/90'}`}></div>
-    </div>
-
-    <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 py-8">
-      <img src={`./logo-${theme}.png`} className="w-1/2"/>
-      
-
-      <div className="w-full md:w-2/3 mt-4 md:mt-8">
-        <p className={`${theme === 'dark' ? 'bg-[hsl(220, 13%, 91%)]':'bg-[hsl(220, 13%, 9%)]'} text-base md:text-xl mb-4 md:mb-6`}>
-          <span className="font-semibold text-lg md:text-2xl">
-            Selamat datang di kawasan pembangunan Zona Integritas
-          </span>{" "}
-          <br />
-          menuju "Wilayah Bebas dari Korupsi (WBK)" dan "Wilayah Birokrasi
-          Bersih dan Melayani (WBBM)"
-        </p>
-      </div>
-      
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-green-500 to-transparent my-4 md:my-8"></div>
-      
-      <h2 className="text-2xl md:text-4xl font-bold mb-6 md:mb-8">
-        8 Asta Protas Kementerian Agama
-      </h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-6xl px-4">
-        {astaProtas.map((title, index) => (
-          <AstaProtaCard key={index} index={index} title={title} />
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// Komponen Kartu Asta Prota
-const AstaProtaCard = ({ index, title }) => (
-  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4 flex items-center transition-all duration-300 hover:bg-green-900/30 hover:scale-105 border border-gray-700 hover:border-green-500">
-    <div className="flex-shrink-0 w-8 h-8 md:w-12 md:h-12 rounded-full bg-green-600 flex items-center justify-center font-bold mr-2 md:mr-3 text-xs md:text-base">
-      {index + 1}
-    </div>
-    <div className="text-xs md:text-sm font-medium">
-      {title}
-    </div>
-  </div>
-);
-
-// Komponen Featured News
-const FeaturedNews = ({ newsItems, activeId, onNewsClick }) => {
-  if (newsItems.length === 0) return null;
-
-  const activeNews = newsItems[activeId] || newsItems[0];
-
-  return (
-    <section id="news-section" className="relative h-screen overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <img
-          src={activeNews.image}
-          className="w-full h-full object-cover"
-          alt={activeNews.title}
-          loading="lazy"
-        />
-        <div className={`absolute inset-0 bg-gradient-to-t ${theme === 'dark' ? 'from-black via-black/70':'from-white via-white/70'} to-transparent`}></div>
-        <div className={`absolute inset-0 bg-gradient-to-b ${theme === 'dark' ? 'from-black/50 to-black/90':'from-white/50 via-white/90'} `}></div>
-        <div className={`absolute inset-0 bg-gradient-to-r ${theme === 'dark' ? 'from-black/40':'from-white/40'} to-transparent`}></div>
-      </div>
-
-      <div className="relative z-10 h-full flex flex-col justify-end pb-20 px-4 md:px-8 lg:px-16">
-        <div className="max-w-2xl">
-          <span className="inline-block px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-full mb-4">
-            {activeNews.category}
-          </span>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
-            {activeNews.title}
-          </h2>
-          <p className={`${theme==='dark'?'text-[hsl(220, 13%, 0%)]': 'text-[hsl(220, 13%, 40%)]'} text-base md:text-lg mb-6 line-clamp-3`}>
-            {activeNews.excerpt}
-          </p>
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
-            <span className="text-gray-400 text-sm">
-              {activeNews.date}
-            </span>
-            <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-medium transition-colors w-full md:w-auto">
-              Baca Selengkapnya
-            </button>
-          </div>
-        </div>
-
-        <NewsCarousel 
-          newsItems={newsItems.slice(0, 8)} 
-          activeId={activeId}
-          onNewsClick={onNewsClick}
-        />
-      </div>
-    </section>
-  );
-};
-
-// Komponen News Carousel
-const NewsCarousel = ({ newsItems, activeId, onNewsClick }) => (
-  <div className="mt-8 md:mt-12">
-    <h3 className="text-lg md:text-xl font-bold mb-4">Berita Terkini</h3>
-    <div className="flex space-x-3 md:space-x-4 overflow-x-auto pb-4 scrollbar-hide">
-      {newsItems.map((item, index) => (
-        <NewsThumbnail 
-          key={index}
-          item={item}
-          index={index}
-          isActive={index === activeId}
-          onClick={onNewsClick}
-        />
-      ))}
-    </div>
-  </div>
-);
-
-// Komponen News Thumbnail
-const NewsThumbnail = ({ item, index, isActive, onClick }) => (
-  <div 
-    className={`flex-none w-48 md:w-64 h-28 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
-      isActive ? 'md:h-44 bg-green-900 ring-2 ring-green-600 scale-105' : 'md:h-36 opacity-70 hover:opacity-100 hover:scale-105'
-    }`}
-    onClick={() => onClick(index)}
-  >
-    <img 
-      src={item.image} 
-      className="w-full h-36 object-cover"
-      alt={item.title}
-      loading="lazy"
-    />
-    <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2 ${isActive ? '' : 'hidden'}`}>
-      <p className="text-white text-xs md:text-sm font-medium truncate">{item.title}</p>
-    </div>
-  </div>
-);
-
-// Komponen News Grid
-const NewsGrid = ({ newsItems }) => (
-  <section className="py-12 md:py-16 px-4 md:px-8 lg:px-16 bg-black text-white/80">
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8">
-      <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-0">Semua Berita</h2>
-      <ExternalLinkButton />
-    </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-      {newsItems.slice(0, 8).map((news, index) => (
-        <NewsCard key={index} news={news} />
-      ))}
-    </div>
-  </section>
-);
-
-// Komponen News Card
-const NewsCard = ({ news }) => (
-  <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border border-gray-800 hover:border-green-500/30">
-    <div className="h-40 md:h-48 relative">
-      <img
-        src={news.image}
-        className="w-full h-full object-cover"
-        alt={news.title}
-        loading="lazy"
-      />
-      <div className="absolute top-0 left-0 bg-gradient-to-b from-black/60 to-transparent w-full h-16"></div>
-      <span className="absolute top-3 left-3 px-2 py-1 bg-green-600 text-white text-xs font-medium rounded">
-        {news.category}
-      </span>
-    </div>
-    <div className="p-3 md:p-4">
-      <h3 className="text-base md:text-lg font-bold mb-2 line-clamp-2">
-        {news.title}
-      </h3>
-      <p className="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-3">
-        {news.excerpt}
-      </p>
-      <div className="flex justify-between items-center">
-        <span className="text-gray-500 text-xs">{news.date}</span>
-        <button className="text-green-500 hover:text-green-400 text-xs md:text-sm font-medium">
-          Baca →
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-// Komponen External Link Button
-const ExternalLinkButton = () => (
-  <a 
-    href="https://sumut.kemenag.go.id/beranda/list-pencarian?cari=batu%20bara" 
-    target="_blank" 
-    rel="noopener noreferrer"
-    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors flex items-center"
-  >
-    Baca Selengkapnya
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-      <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-    </svg>
-  </a>
-);
-
-// Komponen Dashboard
-const Dashboard = ({
-  filteredData,
-  statistics,
-  golonganOptions,
-  statusOptions,
-  selectedGolongan,
-  selectedStatus,
-  onFilterChange,
-  mkTahunChartData,
-  mkTahunChartOptions,
-}) => (
-  <section id="kepeg" className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 neo-card">
-    <div className="max-w-7xl mx-auto">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Dashboard Kepegawaian</h1>
-      
-      <DashboardFilters
-        golonganOptions={golonganOptions}
-        statusOptions={statusOptions}
-        selectedGolongan={selectedGolongan}
-        selectedStatus={selectedStatus}
-        onFilterChange={onFilterChange}
-      />
-      
-      <StatisticsCards statistics={statistics} />
-      
-      <ChartsSection
-        filteredData={filteredData}
-        mkTahunChartData={mkTahunChartData}
-        mkTahunChartOptions={mkTahunChartOptions}
-      />
-    </div>
-  </section>
-);
-
-// Komponen Dashboard Filters
-const DashboardFilters = ({
-  golonganOptions,
-  statusOptions,
-  selectedGolongan,
-  selectedStatus,
-  onFilterChange,
-}) => (
-  <div className="flex flex-col sm:flex-row gap-4 mb-8">
-    <FilterSelect
-      label="Filter berdasarkan Golongan"
-      value={selectedGolongan}
-      options={golonganOptions}
-      onChange={(value) => onFilterChange("golongan", value)}
-    />
-    <FilterSelect
-      label="Filter berdasarkan Status"
-      value={selectedStatus}
-      options={statusOptions}
-      onChange={(value) => onFilterChange("status", value)}
-    />
-  </div>
-);
-
-const FilterSelect = ({ label, value, options, onChange }) => (
-  <div className="flex-1">
-    <label className="block text-sm font-medium text-gray-400 mb-1">{label}</label>
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`w-full neo-card border-none text-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 ${theme==='dark'?'bg-black':'bg-white'}`}
-    >
-      {options.map((option) => (
-        <option key={option} value={option} className="">
-          {option}
-        </option>
-      ))}
-    </select>
-  </div>
-);
-
-// Komponen Statistics Cards
-const StatisticsCards = ({ statistics }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
-    <StatCard label="Jumlah Pegawai" value={statistics.total} />
-    <StatCard label="Pegawai Aktif" value={statistics.active} />
-    <StatCard label="Pegawai PNS" value={statistics.pns} />
-    <StatCard label="Pegawai Non-PNS" value={statistics.total - statistics.pns} />
-  </div>
-);
-
-const StatCard = ({ label, value }) => (
-  <div className="neo-card p-4 sm:p-6">
-    <div className="text-gray-400 text-sm mb-2">{label}</div>
-    <div className="text-xl sm:text-2xl font-semibold text-green-500">{value}</div>
-  </div>
-);
-
-// Komponen Charts Section
-const ChartsSection = ({ filteredData, mkTahunChartData, mkTahunChartOptions }) => (
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-    <ChartContainer title="Distribusi Pegawai berdasarkan Generasi">
-      <ReusableDoughnutChart
-        jsonData={filteredData}
-        dataKey={"Generasi"}
-      />
-    </ChartContainer>
-    
-    <ChartContainer title="Distribusi Pegawai berdasarkan Pendidikan">
-      <ReusableDoughnutChart
-        jsonData={filteredData}
-        dataKey={"JENJANG_PENDIDIKAN"}
-      />
-    </ChartContainer>
-    
-    <ChartContainer title="Distribusi Masa Kerja Pegawai" fullWidth>
-      <div className="h-64 md:h-80">
-        <Bar data={mkTahunChartData} options={mkTahunChartOptions} />
-      </div>
-    </ChartContainer>
-  </div>
-);
-
-// Komponen Chart Container
-const ChartContainer = ({ title, children, fullWidth = false }) => (
-  <div className={`neo-card p-4 sm:p-6 ${fullWidth ? "lg:col-span-2" : ""}`}>
-    <h3 className={`text-lg sm:text-xl font-semibold mb-4 text-center ${theme==='dark'?'text-gray-200':'text-gray-800'} `}>{title}</h3>
-    {children}
-  </div>
-);
 
   return (
     <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
@@ -624,28 +619,15 @@ const ChartContainer = ({ title, children, fullWidth = false }) => (
         newsItems={newsItems}
         activeId={activeId}
         onNewsClick={handleNewsClick}
+        theme={theme}
       />
       
-      <NewsGrid newsItems={newsItems} />
+      <NewsGrid newsItems={newsItems} theme={theme} />
       
-      <Dashboard 
-        filteredData={filteredData}
-        statistics={statistics}
-        golonganOptions={golonganOptions}
-        statusOptions={statusOptions}
-        selectedGolongan={selectedGolongan}
-        selectedStatus={selectedStatus}
-        onFilterChange={handleFilterChange}
-        mkTahunChartData={mkTahunChartData}
-        mkTahunChartOptions={mkTahunChartOptions}
-      />
       
       <Footer />
     </div>
   );
 }
-
-// Komponen Hero Section
-
 
 export default App;

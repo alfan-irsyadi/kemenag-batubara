@@ -1,17 +1,20 @@
 // File: src/main.jsx
 // Updated to wrap with ThemeProvider and add route for /kontak
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from './ThemeContext';
-import App from './App';
-import Layanan from './Layanan';
-import Profil from './Profil';
-import Kontak from './Kontak';
-import './index.css'; // Assuming you have a global CSS file
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import App from "./App";
+import Layanan from './pages/portal/Layanan'
+import Profil from "./pages/portal/Profil";
+import Kontak from "./pages/portal/Kontak";
+import "./index.css"; 
+import Dashboard from "./pages/portal/Dashboard";
+import { ThemeProvider } from "./context/ThemeContext";
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider>
       <BrowserRouter>
@@ -21,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/profil" element={<Profil />} />
           <Route path="/berita" element={<div>Berita Page (TBD)</div>} />
           <Route path="/kontak" element={<Kontak />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
