@@ -84,7 +84,7 @@ const Navbar = ({
                   : "text-gray-800 hover:text-green-600"
               } after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-green-500 after:transition-all after:duration-300 hover:after:w-full`}
             >
-              Layanan ▾
+              Satker ▾
             </button>
             {isLayananOpen && (
               <div
@@ -246,7 +246,7 @@ const Navbar = ({
                   : "text-gray-800 hover:bg-green-500/10 hover:text-green-600 border-gray-200"
               }`}
             >
-              Layanan ▾
+              Satker ▾
             </button>
             {isLayananOpen && (
               <div
