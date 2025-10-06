@@ -276,7 +276,7 @@ const Dashboard = () => {
       />
       
       {/* Hero Banner */}
-      <div className={`hero-banner-${theme}`}>
+      {/* <div className={`hero-banner-${theme}`}>
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1 className={`hero-title-${theme}`}>Dashboard Analytics</h1>
@@ -296,7 +296,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="hero-gradient"></div>
-      </div>
+      </div> */}
 
       <div className="netflix-layout">
         {/* Netflix-style Sidebar */}
@@ -329,7 +329,7 @@ const Dashboard = () => {
         <div className="netflix-main">
           <div className="content-header">
             <div className="header-text">
-              <h2 className="content-title">{satkerList.find(s => s.id === selectedSatker)?.name}</h2>
+              <h2 className="content-title">Dashboard {satkerList.find(s => s.id === selectedSatker)?.name}</h2>
               <p className="content-subtitle">Data Analytics & Insights</p>
             </div>
             

@@ -135,7 +135,7 @@ const FeaturedNews = ({ newsItems, activeId, onNewsClick, theme }) => {
         </div>
 
         <NewsCarousel 
-          newsItems={newsItems.slice(0, 8)} 
+          newsItems={newsItems.slice(0, 4)} 
           activeId={activeId}
           onNewsClick={onNewsClick}
         />
@@ -165,7 +165,7 @@ const NewsCarousel = ({ newsItems, activeId, onNewsClick }) => (
 // Komponen News Thumbnail
 const NewsThumbnail = ({ item, index, isActive, onClick }) => (
   <div 
-    className={`flex-none w-48 md:w-64 h-28 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
+    className={`flex-none w-48 md:w-80 h-56 rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
       isActive ? 'md:h-44 bg-green-900 ring-2 ring-green-600 scale-105' : 'md:h-36 opacity-70 hover:opacity-100 hover:scale-105'
     }`}
     onClick={() => onClick(index)}
