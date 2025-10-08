@@ -17,6 +17,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ThemeContext from "./context/ThemeContext";
 import "./App.css";
+import { RunningTicker, PrayerTimesWidget } from "./components/PortalWidgets";
 
 // Register ChartJS components once
 ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale, LinearScale, BarElement);
@@ -380,6 +381,7 @@ function App() {
   const { theme } = useContext(ThemeContext);
   const [data, setData] = useState([]);
   const [newsItems, setNewsItems] = useState([]);
+  const tickerHeadlines = useMemo(() => (newsItems || []).map(n => n.title).filter(Boolean), [newsItems]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeId, setActiveId] = useState(0);
@@ -608,10 +610,13 @@ function App() {
     <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
       <Navbar 
         scrolled={scrolled} 
+        isApp={true}
         isLayananOpen={isLayananOpen}
         toggleLayananDropdown={toggleLayananDropdown}
         handleSatkerSelect={handleSatkerSelect}
       />      
+      <div className="h-16 md:h-20"></div>
+      <RunningTicker headlines={tickerHeadlines} theme={theme} />
       
       <HeroSection astaProtas={ASTA_PROTAS} theme={theme} />
       
@@ -622,9 +627,28 @@ function App() {
         theme={theme}
       />
       
+      
+      
       <NewsGrid newsItems={newsItems} theme={theme} />
       
-      
+      <section className="px-4 md:px-8 lg:px-16 mt-8 min-h-0 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:auto-rows-fr">
+          <div className="md:col-span-1 h-full flex">
+            <div className="flex-1">
+              <PrayerTimesWidget theme={theme} fullHeight />
+            </div>
+          </div>
+          <div className="md:col-span-2 h-full flex">
+            <div className="rounded-xl border border-gray-700/30 p-4 flex-1 flex flex-col">
+              <h3 className="font-semibold mb-2">Informasi Layanan</h3>
+              <p className="text-sm opacity-80 mb-3">Kunjungi halaman Layanan untuk informasi Satker, Tupoksi, dan SOP.</p>
+              <div className="mt-auto">
+                <a href="/layanan" className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">Ke Halaman Layanan</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <Footer />
     </div>
   );

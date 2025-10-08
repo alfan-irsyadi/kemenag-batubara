@@ -8,6 +8,7 @@ import Footer from "../../components/Footer";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import "../../App.css";
+import { RunningTicker, PrayerTimesWidget } from "../../components/PortalWidgets";
 
 // Note: Assume react-leaflet and leaflet are installed: npm install react-leaflet leaflet
 
@@ -64,6 +65,11 @@ function Profil() {
   const [isLayananOpen, setIsLayananOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const headlines = [
+    "Profil Kemenag Kab. Batu Bara",
+    "Visi: Profesional, Terpercaya, Melayani",
+    "Misi: Peningkatan kualitas kehidupan beragama"
+  ];
 
   const toggleLayananDropdown = () => {
     setIsLayananOpen(!isLayananOpen);
@@ -82,7 +88,18 @@ function Profil() {
         toggleLayananDropdown={toggleLayananDropdown}
         handleSatkerSelect={handleSatkerSelect}
       />
-      <ProfilSection />
+      <div className="h-16 md:h-20"></div>
+      <RunningTicker headlines={headlines} theme={'dark'} />
+      <div className="px-4 md:px-8 lg:px-16 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="md:col-span-2">
+            <ProfilSection />
+          </div>
+          <div className="md:col-span-1">
+            <PrayerTimesWidget theme={'dark'} />
+          </div>
+        </div>
+      </div>
       <Footer />
     </div>
   );

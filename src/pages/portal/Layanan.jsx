@@ -2,10 +2,11 @@
 // Updated to use reusable Navbar and Footer, and support theme (no direct changes needed, as theme is applied via body class)
 
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import "../../App.css";
+import { RunningTicker, PrayerTimesWidget } from "../../components/PortalWidgets";
 
 const layananData = [
   {
@@ -118,6 +119,12 @@ const LayananSection = () => {
 function Layanan() {
   const [isLayananOpen, setIsLayananOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const headlines = [
+    "Informasi Layanan Satker",
+    "Tupoksi, SOP, dan IKM tersedia",
+    "Pilih satuan kerja untuk melihat detail"
+  ];
 
   const toggleLayananDropdown = () => {
     setIsLayananOpen(!isLayananOpen);
@@ -137,7 +144,16 @@ function Layanan() {
         toggleLayananDropdown={toggleLayananDropdown}
         handleSatkerSelect={handleSatkerSelect}
       />      
-      <LayananSection />
+      <div className="h-16 md:h-20"></div>
+      <RunningTicker headlines={headlines} theme={'dark'} />
+      <div className="px-4 md:px-8 lg:px-16 mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="md:col-span-2">
+          <LayananSection />
+        </div>
+        <div className="md:col-span-1">
+          <PrayerTimesWidget theme={'dark'} />
+        </div>
+      </div>
       <Footer />
     </div>
   );

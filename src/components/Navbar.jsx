@@ -16,6 +16,7 @@ const Navbar = ({
   isLayananOpen,
   toggleLayananDropdown,
   handleSatkerSelect,
+  isApp = false
 }) => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -39,7 +40,7 @@ const Navbar = ({
     >
       <div className="container mx-auto px-4 sm:px-8 flex justify-between items-center py-3 sm:py-4">
         <div className="flex items-center">
-          {scrolled ? (
+          {(scrolled || !isApp )? (
             <img
               src={`/logo-${theme}.png`}
               alt="Kemenag Logo"

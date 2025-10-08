@@ -4,11 +4,17 @@ import { useNavigate } from "react-router-dom"; // Tambahkan ini
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import "../../App.css";
+import { RunningTicker, PrayerTimesWidget } from "../../components/PortalWidgets";
 
 function Kontak() {
   const [isLayananOpen, setIsLayananOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate(); // Tambahkan ini
+  const headlines = [
+    "Hubungi Kami untuk Informasi Layanan",
+    "Jam kerja: Senin-Jumat, 08.00 - 16.00 WIB",
+    "Email: kemenagbatubara@gmail.com | Telp: (0622) 96408"
+  ];
 
   const toggleLayananDropdown = () => {
     setIsLayananOpen(!isLayananOpen);
@@ -27,6 +33,8 @@ function Kontak() {
         toggleLayananDropdown={toggleLayananDropdown}
         handleSatkerSelect={handleSatkerSelect}
       />
+      <div className="h-16 md:h-20"></div>
+      <RunningTicker headlines={headlines} theme={'dark'} />
       <section className="py-12 md:py-16 px-4 md:px-8 lg:px-16">
         <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">Kontak Kami</h2>
         <div className="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
@@ -39,6 +47,9 @@ function Kontak() {
           </ul>
         </div>
       </section>
+      <div className="px-4 md:px-8 lg:px-16">
+        <PrayerTimesWidget theme={'dark'} />
+      </div>
       <Footer />
     </div>
   );
