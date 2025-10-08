@@ -61,7 +61,7 @@ const Dashboard = () => {
   const satkerList = [
     { id: "kepegawaian", name: "Kepegawaian", icon: "👥", color: "from-blue-600 to-blue-800" },
     { id: "pendidikan", name: "Pendidikan & Madrasah", icon: "🎓", color: "from-purple-600 to-purple-800" },
-    { id: "rumah-ibadah", name: "Rumah Ibadah", icon: "🕌", color: "from-emerald-600 to-emerald-800" },
+    // { id: "rumah-ibadah", name: "Rumah Ibadah", icon: "🕌", color: "from-emerald-600 to-emerald-800" },
     { id: "bimas-islam", name: "Bimas Islam", icon: "📖", color: "from-teal-600 to-teal-800" },
     { id: "bimas-kristen", name: "Bimas Kristen", icon: "✝️", color: "from-amber-600 to-amber-800" },
   ];
