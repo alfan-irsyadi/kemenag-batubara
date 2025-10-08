@@ -54,7 +54,7 @@ const HeroSection = ({ astaProtas, theme }) => (
     </div>
 
     <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 py-8">
-      <img src={`./logo-${theme}.png`} className="w-1/2" alt="Logo Kemenag"/>
+      <img src={`./logo-${theme}.png`} className="w-[80%] md:w-1/2" alt="Logo Kemenag"/>
       
       <div className="w-full md:w-2/3 mt-4 md:mt-8">
         <p className={`${theme === 'dark' ? 'text-gray-200':'text-gray-800'} text-base md:text-xl mb-4 md:mb-6`}>
