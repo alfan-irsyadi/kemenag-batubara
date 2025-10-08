@@ -12,6 +12,7 @@ import Kontak from "./pages/portal/Kontak";
 import "./index.css"; 
 import Dashboard from "./pages/portal/Dashboard";
 import { ThemeProvider } from "./context/ThemeContext";
+import KompasKiblat from "./pages/portal/KompasKiblat";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/berita" element={<div>Berita Page (TBD)</div>} />
           <Route path="/kontak" element={<Kontak />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/kompas-kiblat" element={<KompasKiblat />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

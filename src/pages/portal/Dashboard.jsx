@@ -569,6 +569,38 @@ const KepegawaianDashboard = ({
           </div>
         </NetflixChartCard>
       </div>
+
+      <div className="chart-full">
+        <div className="chart-header"><div className="chart-title-group"><span className="chart-icon">📄</span><h3 className="chart-title">Tabel Dinamis</h3></div></div>
+        <div className="chart-body">
+          <DynamicTable
+            title="Jumlah Pegawai per Generasi"
+            columns={["Generasi","Jumlah"]}
+            rows={(() => { const cnt = (filteredData||[]).reduce((a,x)=>{ const k=x?.['Generasi']||'Tidak Ditentukan'; a[k]=(a[k]||0)+1; return a; },{}); return Object.entries(cnt).map(([k,v])=>({Generasi:k, Jumlah:v})); })()}
+            filename="pegawai-per-generasi.csv"
+          />
+          <DynamicTable
+            title="Jumlah Pegawai per Pendidikan"
+            columns={["JENJANG_PENDIDIKAN","Jumlah"]}
+            rows={(() => { const cnt = (filteredData||[]).reduce((a,x)=>{ const k=x?.['JENJANG_PENDIDIKAN']||'Tidak Ditentukan'; a[k]=(a[k]||0)+1; return a; },{}); return Object.entries(cnt).map(([k,v])=>({JENJANG_PENDIDIKAN:k, Jumlah:v})); })()}
+            filename="pegawai-per-pendidikan.csv"
+          />
+          <DynamicTable
+            title="Distribusi Masa Kerja (Tahun)"
+            columns={["Rentang","Jumlah"]}
+            rows={(() => {
+              const cnt = (filteredData||[]).reduce((acc, item) => {
+                const mk = parseInt(item?.MK_TAHUN)||0;
+                let range = mk<5? '0-4' : mk<10? '5-9' : mk<15? '10-14' : mk<20? '15-19' : mk<25? '20-24' : '25+';
+                acc[range]=(acc[range]||0)+1; return acc;
+              }, {});
+              const order=["0-4","5-9","10-14","15-19","20-24","25+"];
+              return order.filter(k=>cnt[k]).map(k=>({Rentang:k, Jumlah:cnt[k]}));
+            })()}
+            filename="pegawai-masa-kerja.csv"
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -811,6 +843,30 @@ const PendidikanDashboard = ({ lembagaData, gtkData, theme, chartOptions }) => {
             }} />
           </div>
         </NetflixChartCard>
+      </div>
+
+      <div className="chart-full">
+        <div className="chart-header"><div className="chart-title-group"><span className="chart-icon">📄</span><h3 className="chart-title">Tabel Dinamis</h3></div></div>
+        <div className="chart-body">
+          <DynamicTable
+            title="Lembaga per Kecamatan"
+            columns={["Kecamatan","Jumlah"]}
+            rows={(() => { const c=(lembagaData||[]).reduce((a,x)=>{ const k=x?.Kecamatan||x?.kecamatan||'Tidak Ditentukan'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Kecamatan:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="lembaga-per-kecamatan.csv"
+          />
+          <DynamicTable
+            title="Distribusi Jenjang"
+            columns={["Jenjang","Jumlah"]}
+            rows={(() => { const c=(lembagaData||[]).reduce((a,x)=>{ const k=x?.Jenjang||x?.['Jenjang']||'Tidak Ditentukan'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Jenjang:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="distribusi-jenjang.csv"
+          />
+          <DynamicTable
+            title="Status Madrasah"
+            columns={["Status","Jumlah"]}
+            rows={(() => { const c=(lembagaData||[]).reduce((a,x)=>{ const k=x?.Status||x?.['Status']||'Tidak Ditentukan'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Status:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="status-madrasah.csv"
+          />
+        </div>
       </div>
     </div>
   );
@@ -1059,6 +1115,30 @@ const PeristiwaNikahView = ({ theme, chartOptions }) => {
           </div>
         </NetflixChartCard>
       </div>
+
+      <div className="chart-full">
+        <div className="chart-header"><div className="chart-title-group"><span className="chart-icon">📄</span><h3 className="chart-title">Tabel Dinamis</h3></div></div>
+        <div className="chart-body">
+          <DynamicTable
+            title="Peristiwa Nikah per Bulan"
+            columns={["Bulan","Jumlah"]}
+            rows={(() => { const c=(dataSanitized||[]).reduce((a,x)=>{ const s=String(x?.tanggal_akad_filter||''); const m=(s.match(/(\d{4})-(\d{2})/)||[])[0]||'Tidak Diketahui'; a[m]=(a[m]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Bulan:k,Jumlah:v})).sort((a,b)=>a.Bulan.localeCompare(b.Bulan)); })()}
+            filename="nikah-per-bulan.csv"
+          />
+          <DynamicTable
+            title="Peristiwa Nikah per Kecamatan"
+            columns={["Kecamatan","Jumlah"]}
+            rows={(() => { const c=(dataSanitized||[]).reduce((a,x)=>{ const k=x?.nama_kecamatan||'Tidak Diketahui'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Kecamatan:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="nikah-per-kecamatan.csv"
+          />
+          <DynamicTable
+            title="Komposisi Lokasi Nikah (nikah_di)"
+            columns={["nikah_di","Jumlah"]}
+            rows={(() => { const c=(dataSanitized||[]).reduce((a,x)=>{ const k=x?.nikah_di||'Tidak Diketahui'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({nikah_di:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="nikah-lokasi.csv"
+          />
+        </div>
+      </div>
     </>
   );
 };
@@ -1211,6 +1291,30 @@ const MasjidView = ({ theme, chartOptions }) => {
             }} options={chartOptions} />
           </div>
         </NetflixChartCard>
+      </div>
+
+      <div className="chart-full">
+        <div className="chart-header"><div className="chart-title-group"><span className="chart-icon">📄</span><h3 className="chart-title">Tabel Dinamis</h3></div></div>
+        <div className="chart-body">
+          <DynamicTable
+            title="Masjid per Kecamatan"
+            columns={["Kecamatan","Jumlah"]}
+            rows={(() => { const c=(rows||[]).reduce((a,x)=>{ const k=x?.Kecamatan||x?.kecamatan||'Tidak Diketahui'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Kecamatan:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="masjid-per-kecamatan.csv"
+          />
+          <DynamicTable
+            title="Distribusi Tipologi"
+            columns={["Tipologi","Jumlah"]}
+            rows={(() => { const c=(rows||[]).reduce((a,x)=>{ const k=x?.Tipologi||'Tidak Ditentukan'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Tipologi:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="tipologi-masjid.csv"
+          />
+          <DynamicTable
+            title="Rata-rata Jamaah per Kecamatan"
+            columns={["Kecamatan","Rata-rata Jamaah"]}
+            rows={(() => { const agg={}; (rows||[]).forEach(r=>{ const k=r?.Kecamatan||r?.kecamatan||'Tidak Diketahui'; const v=r?.Jamaah; if(v!=null){ agg[k]=agg[k]||{sum:0,n:0}; agg[k].sum+=v; agg[k].n+=1; }}); return Object.entries(agg).map(([k,{sum,n}])=>({Kecamatan:k, "Rata-rata Jamaah": Math.round(sum/n)})).sort((a,b)=>b["Rata-rata Jamaah"]-a["Rata-rata Jamaah"]); })()}
+            filename="rata-rata-jamaah.csv"
+          />
+        </div>
       </div>
     </>
   );
@@ -1367,6 +1471,30 @@ const BimasKristenDashboard = ({ theme, chartOptions }) => {
           </div>
         </NetflixChartCard>
       </div>
+
+      <div className="chart-full">
+        <div className="chart-header"><div className="chart-title-group"><span className="chart-icon">📄</span><h3 className="chart-title">Tabel Dinamis</h3></div></div>
+        <div className="chart-body">
+          <DynamicTable
+            title="Gereja per Kecamatan"
+            columns={["Kecamatan","Jumlah"]}
+            rows={(() => { const c=(rows||[]).reduce((a,x)=>{ const k=x?.kecamatan||'Tidak Diketahui'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Kecamatan:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="gereja-per-kecamatan.csv"
+          />
+          <DynamicTable
+            title="Status Gedung"
+            columns={["Status","Jumlah"]}
+            rows={(() => { const c=(rows||[]).reduce((a,x)=>{ const k=x?.status_gedung_gereja||'Tidak Diketahui'; a[k]=(a[k]||0)+1; return a;},{}); return Object.entries(c).map(([k,v])=>({Status:k,Jumlah:v})).sort((a,b)=>b.Jumlah-a.Jumlah); })()}
+            filename="status-gedung-gereja.csv"
+          />
+          <DynamicTable
+            title="Total Anggota Jemaat per Kecamatan"
+            columns={["Kecamatan","Anggota"]}
+            rows={(() => { const c=(rows||[]).reduce((a,x)=>{ const k=x?.kecamatan||'Tidak Diketahui'; const v=x?.jumlah_anggota_jemaat; if(v!=null){ a[k]=(a[k]||0)+v; } return a;},{}); return Object.entries(c).map(([k,v])=>({Kecamatan:k,Anggota:v})).sort((a,b)=>b.Anggota-a.Anggota); })()}
+            filename="jemaat-per-kecamatan.csv"
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -1500,6 +1628,75 @@ const NetflixChartCard = ({ title, icon, children, fullWidth = false, theme, act
       <div className="chart-body">
         {children}
       </div>
+    </div>
+  );
+};
+
+// Reusable Dynamic Table with CSV download and preview toggle
+const DynamicTable = ({ title, columns = [], rows = [], filename = 'table.csv', maxPreview = 25, defaultCollapsed = false }) => {
+  const [open, setOpen] = useState(!defaultCollapsed);
+  const [showAll, setShowAll] = useState(false);
+
+  const downloadCSV = () => {
+    try {
+      const escapeCell = (v) => {
+        if (v === null || v === undefined) return '';
+        const s = String(v).replace(/"/g,'""');
+        return /[",\n]/.test(s) ? `"${s}"` : s;
+      };
+      const csv = [
+        columns.join(','),
+        ...rows.map(r => columns.map(c => escapeCell(r?.[c])).join(','))
+      ].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    } catch(e) { console.error('CSV download failed', e); }
+  };
+
+  const visibleRows = showAll ? rows : rows.slice(0, Math.min(maxPreview, rows.length));
+
+  return (
+    <div className="rounded-xl border border-gray-700/30 mb-4">
+      <button className="w-full flex justify-between items-center px-4 py-3 text-left" onClick={() => setOpen(o=>!o)}>
+        <h4 className="font-semibold">{title}</h4>
+        <span className="text-sm opacity-70">{open ? 'Tutup' : 'Buka'}</span>
+      </button>
+      {open && (
+        <div className="p-4 pt-0">
+          <div className="flex justify-between items-center mb-3">
+            <div className="text-xs opacity-70">{showAll ? `Menampilkan semua ${rows.length} baris` : `Menampilkan ${Math.min(maxPreview, rows.length)} dari ${rows.length}`}</div>
+            <div className="flex gap-2">
+              <button className="px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-sm" onClick={downloadCSV}>Download CSV</button>
+              
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead>
+                <tr>
+                  {columns.map((c, i) => (
+                    <th key={i} className="text-left px-3 py-2 border-b border-gray-700/30">{c}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {visibleRows.map((r, idx) => (
+                  <tr key={idx} className={idx % 2 ? 'bg-gray-800/30' : ''}>
+                    {columns.map((c, i) => (
+                      <td key={i} className="px-3 py-2 border-b border-gray-700/20">{r?.[c] ?? ''}</td>
+                    ))}
+                  </tr>
+                ))}
+                {!visibleRows.length && (
+                  <tr><td colSpan={columns.length} className="px-3 py-3 text-center opacity-70">Tidak ada data</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
